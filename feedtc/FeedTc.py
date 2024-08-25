@@ -106,13 +106,17 @@ class FeedTcTask:
     def process_item(self, item: FeedItem):
         logging.info("Item: " + item.title)
 
+        accept_debug = False
+        reject_debug = False
+        # if item.title == 'TITLE': accept_debug = True
+
         item_status = {'accepted': False, 'rejected': False}
         for item_filter in self.task.get('filter'):
-            if item.check_filter(item_filter.get('reject')):
-                item_status['reject'] = True
+            if item.check_filter(item_filter.get('reject'), reject_debug):
+                item_status['rejected'] = True
                 break
-            if item.check_filter(item_filter.get('accept')):
-                item_status['accept'] = True
+            if item.check_filter(item_filter.get('accept'), accept_debug):
+                item_status['accepted'] = True
                 item.set_download_dir(item_filter.get('download_dir'))
                 break
 

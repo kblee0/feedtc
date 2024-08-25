@@ -27,8 +27,8 @@ class FeedItem:
         if not filters:
             return False
         for pattern in filters:
-            if debug: logging.info("title: {}, pattern: {}".format(self.title, pattern))
             match = re.search(pattern, self.title)
+            if debug: logging.info("title: {}, pattern: {}, match: {}".format(self.title, pattern, match))
             if match:
                 self.match = match
                 return True
