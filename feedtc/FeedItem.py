@@ -1,3 +1,4 @@
+import logging
 import re
 
 class FeedItem:
@@ -22,10 +23,11 @@ class FeedItem:
     def set_download_dir(self, download_dir):
         self.download_dir = download_dir
 
-    def check_filter(self, filters):
+    def check_filter(self, filters, debug=False):
         if not filters:
             return False
         for pattern in filters:
+            if debug: logging.info("title: {}, pattern: {}".format(self.title, pattern))
             match = re.search(pattern, self.title)
             if match:
                 self.match = match
