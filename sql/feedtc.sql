@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS "T_ADDED_ITEM" (
+        TITLE TEXT PRIMARY KEY,
+        MATCH_NAME TEXT,
+        SERIES_NAME TEXT,
+        REG_DT    TIMESTAMP  DEFAULT (datetime('now','localtime'))
+);
