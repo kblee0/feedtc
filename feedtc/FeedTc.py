@@ -101,6 +101,7 @@ class FeedTcTask:
 
         for item in self.item_list:
             self.process_item(item)
+        logging.info("Feed transmission summary: {}".format(self.result))
 
     def process_item(self, item: FeedItem):
         logging.info("Item: " + item.title)
