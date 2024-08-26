@@ -133,7 +133,7 @@ class FeedTcTask:
 
             for match_num, match in enumerate(matches):
                 feed_item = FeedItem()
-                feed_item.set_title_by_match(src['item_title'], match).set_link_by_match(src['item_link'], match)
+                feed_item.set_title_by_match(src['item_title'], match).set_link_by_match(src['item_link'], match, url)
 
                 self.item_list.append(feed_item)
 
