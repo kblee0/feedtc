@@ -1,5 +1,6 @@
 import base64
 import logging
+import os
 import re
 import urllib.parse
 import urllib.request
@@ -57,8 +58,9 @@ class FeedTcTask:
     def process_item(self, item: FeedItem):
         logging.info("Item: " + item.title)
 
-        accept_debug = False
-        reject_debug = False
+        accept_debug = True if os.environ.get('FEEDTC_DEBUG_TITLE') == item.title else False
+        reject_debug = True if os.environ.get('FEEDTC_RJ_DEBUG_TITLE') == item.title else False
+
         # if item.title == 'TITLE': accept_debug = True
 
         item_status = {'accepted': False, 'rejected': False}
