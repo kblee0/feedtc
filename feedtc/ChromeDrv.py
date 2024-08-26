@@ -23,15 +23,6 @@ class ChromeDrv:
         self.display.stop()
 
     # chrome start
-    def __enter__(self):
-        self.start()
-        return self
-
-    # chrome quit
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.quit()
-
-    # chrome start
     def start(self):
         try:
             if self.driver is None: self.driver = webdriver.Chrome()
