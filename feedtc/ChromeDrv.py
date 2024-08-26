@@ -8,7 +8,7 @@ class ChromeDrv:
     def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
             cls.__instance = super(ChromeDrv, cls).__new__(cls)
-            cls.__initialized = False
+            cls.__instance.__initialized = False
         return cls.__instance
 
     def __init__(self):

@@ -8,7 +8,7 @@ class FeedItemHist:
     def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
             cls.__instance = super(FeedItemHist, cls).__new__(cls)
-            cls.__initialized = False
+            cls.__instance.__initialized = False
         return cls.__instance
 
     def __init__(self, database=None):
@@ -33,7 +33,7 @@ class FeedItemHist:
         cursor = self.conn.cursor()
 
         cursor.execute(
-            "select count(*) from t_added_item where ? like '%'||match_name||'%' or (series_name != '' and series_name = ?)",
+            "select count(*) from t_item_hist where ? like '%'||match_name||'%' or (series_name != '' and series_name = ?)",
             (item.title, item.series_name))
         row = cursor.fetchall()
 
@@ -42,6 +42,6 @@ class FeedItemHist:
     def save_item(self, item: FeedItem):
         print(item)
         self.conn.execute(
-            "insert into t_added_item (title,match_name,series_name) values (?,?,?)",
+            "insert into t_item_hist (title,match_name,series_name) values (?,?,?)",
             (item.title, item.match.group(0), item.series_name))
         self.conn.commit()
