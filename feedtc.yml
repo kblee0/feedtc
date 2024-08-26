@@ -1,0 +1,28 @@
+tasks:
+  task1:
+    inputs:
+      - html:
+        - "https://torrent.com/v-4-16?page=1"
+        - "https://torrent.com/v-2-13?page=1"
+        - "https://torrent.com/v-4-17?page=1"
+        item_pattern: >-
+          <a (class="" |)title="(.*?)" href="(.*?)">
+        item_title: "{2}"
+        item_link: "{3}"
+    filter:
+      - accept:
+          - 'PATTERN1.*720p'
+          - 'PATTERN1.*1024p'
+        download_dir: '/vol/data/down/'
+      - accept:
+          - 'PATTERN2.*720p'
+          - 'PATTERN2.*1024p'
+        download_dir: '/vol/data/'
+      - reject:
+          - 'PATTERN3.*720p'
+          - 'PATTERN3.*1024p'
+    transmission:
+      host: localhost
+      port: 9091
+      username: 'user'
+      password: 'password'
