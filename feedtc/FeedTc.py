@@ -58,10 +58,9 @@ class FeedTcTask:
     def process_item(self, item: FeedItem):
         logging.info("Item: " + item.title)
 
+        # Match debug test
         accept_debug = True if os.environ.get('FEEDTC_DEBUG_TITLE') == item.title else False
         reject_debug = True if os.environ.get('FEEDTC_RJ_DEBUG_TITLE') == item.title else False
-
-        # if item.title == 'TITLE': accept_debug = True
 
         item_status = {'accepted': False, 'rejected': False}
         for item_filter in self.task.get('filter'):
