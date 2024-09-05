@@ -40,10 +40,13 @@ class FeedTcTask:
         self.transmission = Transmission(task.get('transmission'))
         self.item_list = []
         self.result = {"accepted": 0, "rejected": 0, "undecided": 0, "failed": 0}
+        self.change_urls = []
 
     def run_task(self):
         for input_item in self.task['inputs']:
             self.get_items_from_input(input_item)
+
+        if len(self.change_urls) > 0: notify_message("URL이 변경 되었습니다.\n" + "\n".join(self.change_urls))
 
         if len(self.item_list) == 0:
             first_input = self.task['inputs'][0]
@@ -130,7 +133,9 @@ class FeedTcTask:
                 notify_message("feedtc 오류가 발생 했습니다.\nurl=" + url)
                 exit(1)
 
-            matches = re.finditer(src['item_pattern'], res.replace("\r", ""), re.MULTILINE | re.IGNORECASE)
+            if res.url != url: self.change_urls.append(res.url)
+
+            matches = re.finditer(src['item_pattern'], res.body.replace("\r", ""), re.MULTILINE | re.IGNORECASE)
 
             for match_num, match in enumerate(matches):
                 feed_item = FeedItem()
@@ -145,7 +150,7 @@ class FeedTcTask:
             logging.error("Error reading feed \'{0}\': ".format(url))
             return None
 
-        content = res
+        content = res.body
 
         regex = r"magnet_link\([\'\"](.*?)['\"]\)"
         matches = re.findall(regex, content, re.MULTILINE)

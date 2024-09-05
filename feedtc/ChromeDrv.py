@@ -17,6 +17,7 @@ class ChromeDrv:
         self.display = Display(visible=False, size=(1920, 1080))
         self.display.start()
         self.driver = None
+        self.current_url = None
 
     def __del__(self):
         self.quit()
@@ -43,6 +44,7 @@ class ChromeDrv:
             self.driver.get(url)
             self.driver.implicitly_wait(3)
             res = self.driver.page_source
+            return { "url": self.driver.current_url, "body": res }
         except Exception as ex:
             logging.info("chrome request error : {0}".format(url), ex)
             return None
