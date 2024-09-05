@@ -133,9 +133,9 @@ class FeedTcTask:
                 notify_message("feedtc 오류가 발생 했습니다.\nurl=" + url)
                 exit(1)
 
-            if res.url != url: self.change_urls.append(res.url)
+            if res['url'] != url: self.change_urls.append(res['url'])
 
-            matches = re.finditer(src['item_pattern'], res.body.replace("\r", ""), re.MULTILINE | re.IGNORECASE)
+            matches = re.finditer(src['item_pattern'], res['body'].replace("\r", ""), re.MULTILINE | re.IGNORECASE)
 
             for match_num, match in enumerate(matches):
                 feed_item = FeedItem()
@@ -150,7 +150,7 @@ class FeedTcTask:
             logging.error("Error reading feed \'{0}\': ".format(url))
             return None
 
-        content = res.body
+        content = res['body']
 
         regex = r"magnet_link\([\'\"](.*?)['\"]\)"
         matches = re.findall(regex, content, re.MULTILINE)
