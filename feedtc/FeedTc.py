@@ -23,7 +23,7 @@ class FeedTc:
         FeedItemHist().connect(database)
 
         with open(config_file, 'r', encoding='utf8') as stream:
-            self.config = yaml.safe_load(stream, Loader=yaml.FullLoader)
+            self.config = yaml.safe_load(stream)
 
     def __del__(self):
         FeedItemHist().close()
@@ -31,7 +31,7 @@ class FeedTc:
     def run_job(self):
         for task_name in self.config['tasks']:
             FeedTcTask(self.config['tasks'][task_name]).run_task()
-        yaml.dump(self.config, open(self.config_file + '.new', 'w', encoding='utf8'), default_flow_style=False)
+        yaml.dump(self.config, open(self.config_file + '.new', 'w', encoding='utf8'))
 
 ##########################################################
 # FeedTcTask
