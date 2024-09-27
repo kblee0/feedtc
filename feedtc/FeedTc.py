@@ -33,7 +33,7 @@ class FeedTc:
         for task_name in self.config['tasks']:
             feedtc_task = FeedTcTask(self.config['tasks'][task_name])
             feedtc_task.run_task()
-            change_urls.append(feedtc_task.change_urls)
+            change_urls.extend(feedtc_task.change_urls)
 
         if len(change_urls) > 0:
             notify_message("URL이 변경 되었습니다.\n" + "\n".join(change_urls))
