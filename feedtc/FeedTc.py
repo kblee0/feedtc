@@ -23,7 +23,7 @@ class FeedTc:
         FeedItemHist().connect(database)
 
         with open(config_file, 'r', encoding='utf8') as stream:
-            self.config = yaml.load(stream)
+            self.config = yaml.safe_load(stream)
 
     def __del__(self):
         FeedItemHist().close()
