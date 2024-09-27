@@ -37,7 +37,7 @@ class FeedTc:
 
         if len(change_urls) > 0:
             notify_message("URL이 변경 되었습니다.\n" + "\n".join(change_urls))
-            with open(self.config_file + ".new", 'w', encoding='utf8') as stream:
+            with open(self.config_file, 'w', encoding='utf8') as stream:
                 yaml.safe_dump(self.config, stream, allow_unicode=True, sort_keys=False)
 
 ##########################################################
