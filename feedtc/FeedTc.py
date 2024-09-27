@@ -23,15 +23,22 @@ class FeedTc:
         FeedItemHist().connect(database)
 
         with open(config_file, 'r', encoding='utf8') as stream:
-            self.config = yaml.safe_load(stream)
+            self.config = yaml.load(stream)
 
     def __del__(self):
         FeedItemHist().close()
 
     def run_job(self):
+        change_urls = []
         for task_name in self.config['tasks']:
-            FeedTcTask(self.config['tasks'][task_name]).run_task()
-        yaml.safe_dump(self.config, open(self.config_file + '.new', 'w', encoding='utf8'))
+            feedtc_task = FeedTcTask(self.config['tasks'][task_name])
+            feedtc_task.run_task()
+            change_urls.append(feedtc_task.change_urls)
+
+        if len(change_urls) > 0:
+            notify_message("URL이 변경 되었습니다.\n" + "\n".join(change_urls))
+            with open(self.config_file + ".new", 'w', encoding='utf8') as stream:
+                yaml.safe_dump(self.config, stream, allow_unicode=True, sort_keys=False)
 
 ##########################################################
 # FeedTcTask
@@ -47,8 +54,6 @@ class FeedTcTask:
     def run_task(self):
         for input_item in self.task['inputs']:
             self.get_items_from_input(input_item)
-
-        if len(self.change_urls) > 0: notify_message("URL이 변경 되었습니다.\n" + "\n".join(self.change_urls))
 
         if len(self.item_list) == 0:
             first_input = self.task['inputs'][0]
