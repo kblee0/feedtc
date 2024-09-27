@@ -19,10 +19,11 @@ from feedtc.utils import notify_message
 ##########################################################
 class FeedTc:
     def __init__(self, config_file, database) :
+        self.config_file = config_file
         FeedItemHist().connect(database)
 
         with open(config_file, 'r', encoding='utf8') as stream:
-            self.config = yaml.load(stream, Loader=yaml.FullLoader)
+            self.config = yaml.safe_load(stream, Loader=yaml.FullLoader)
 
     def __del__(self):
         FeedItemHist().close()
@@ -30,6 +31,7 @@ class FeedTc:
     def run_job(self):
         for task_name in self.config['tasks']:
             FeedTcTask(self.config['tasks'][task_name]).run_task()
+        yaml.dump(self.config, open(self.config_file + '.new', 'w', encoding='utf8'), default_flow_style=False)
 
 ##########################################################
 # FeedTcTask
@@ -125,6 +127,7 @@ class FeedTcTask:
 
     def get_items_from_input(self, src):
         urls = src['html'] if isinstance(src['html'], list) else [src['html']]
+        new_urls = []
 
         for url in urls:
             logging.info("SITE URL: " + url)
@@ -132,6 +135,8 @@ class FeedTcTask:
             if res is None:
                 notify_message("feedtc 오류가 발생 했습니다.\nurl=" + url)
                 exit(1)
+
+            new_urls.append(res['url'])
 
             if res['url'] != url: self.change_urls.append(res['url'])
 
@@ -142,6 +147,11 @@ class FeedTcTask:
                 feed_item.set_title_by_match(src['item_title'], match).set_link_by_match(src['item_link'], match, url)
 
                 self.item_list.append(feed_item)
+        if isinstance(src['html'], list):
+            for i in range(len(urls)):
+                src['html'][i] = new_urls[i]
+        else:
+            src['html'] = new_urls[0]
 
     def _get_magnet_url(self, url):
         res = ChromeDrv().get(url)
