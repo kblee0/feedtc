@@ -31,7 +31,7 @@ class FeedTc:
     def run_job(self):
         for task_name in self.config['tasks']:
             FeedTcTask(self.config['tasks'][task_name]).run_task()
-        yaml.dump(self.config, open(self.config_file + '.new', 'w', encoding='utf8'))
+        yaml.safe_dump(self.config, open(self.config_file + '.new', 'w', encoding='utf8'))
 
 ##########################################################
 # FeedTcTask
