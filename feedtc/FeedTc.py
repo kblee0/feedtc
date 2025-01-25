@@ -137,6 +137,18 @@ class FeedTcTask:
         for url in urls:
             logging.info("SITE URL: " + url)
             res = ChromeDrv().get(url)
+
+            if res['url'] != url:
+                opr = urllib.parse.urlparse(url)
+                npr = urllib.parse.urlparse(res['url'])
+                if opr.netloc != npr.netloc:
+                    newurl = urllib.parse.urlunparse(
+                        urllib.parse.ParseResult(scheme=opr.scheme, netloc=npr.netloc, path=opr.path, params=opr.params,
+                                                 query=opr.query, fragment=opr.fragment))
+                    if res['url'] != newurl:
+                        logging.info("New URL: " + newurl)
+                        res = ChromeDrv().get(newurl)
+
             if res is None:
                 notify_message("feedtc 오류가 발생 했습니다.\nurl=" + url)
                 exit(1)
