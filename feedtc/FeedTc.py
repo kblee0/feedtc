@@ -158,7 +158,7 @@ class FeedTcTask:
 
             if res['url'] != url: self.change_urls.append(res['url'])
 
-            matches = re.finditer(src['item_pattern'], res['body'].replace("\r", ""), re.MULTILINE | re.IGNORECASE)
+            matches = re.finditer(src['item_pattern'], res['body'].replace("\r", ""), re.DOTALL | re.IGNORECASE)
 
             for match_num, match in enumerate(matches):
                 feed_item = FeedItem()
