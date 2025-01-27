@@ -138,6 +138,7 @@ class FeedTcTask:
             logging.info("SITE URL: " + url)
             res = ChromeDrv().get(url)
 
+            # Redirect되며 다른 페이지를 응답할때 도메인만 바꿔 다시조회
             if res['url'] != url:
                 opr = urllib.parse.urlparse(url)
                 npr = urllib.parse.urlparse(res['url'])

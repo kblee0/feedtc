@@ -67,6 +67,11 @@ class FeedItem:
             if match:
                 self.match = match
                 return True
+            match = re.search(pattern, self.title.replace(' ', ''))
+            if debug: logging.info("title: {}, pattern: {}, match: {}".format(self.title, pattern, match))
+            if match:
+                self.match = match
+                return True
         self.match = None
         return False
 
