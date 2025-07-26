@@ -50,6 +50,7 @@ class FeedTcTask:
         self.item_list = []
         self.result = {"accepted": 0, "rejected": 0, "undecided": 0, "failed": 0}
         self.change_urls = []
+        self.download_items = []
 
     def run_task(self):
         for input_item in self.task['inputs']:
@@ -63,6 +64,9 @@ class FeedTcTask:
 
         for item in self.item_list:
             self.process_item(item)
+
+        if len(self.download_items) > 0:
+            notify_message("Downloading:\n" + "\n".join(self.download_items))
         logging.info("Feed transmission summary: {}".format(self.result))
 
     def process_item(self, item: FeedItem):
@@ -126,7 +130,7 @@ class FeedTcTask:
 
         self.transmission.add_torrent(torrent_url, item.download_dir)
         logging.info("Adding Torrent: " + item.title + (("to "+ item.download_dir) if item.download_dir else ""))
-        notify_message("Downloading: " + item.title)
+        self.download_items.append(item.title)
 
         FeedItemHist().save_item(item)
 
