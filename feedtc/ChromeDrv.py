@@ -64,10 +64,9 @@ class ChromeDrv:
 
             # 페이지 이동
             page.goto(url)
-            page.wait_for_timeout(5000)  # 5초 대기
-
+            page.wait_for_load_state('networkidle') # 네트워크 idle 상태까지 대기
             res = page.content()
-            return { "url": self.driver.current_url, "body": res }
+            return { "url": page.url, "body": res }
         except Exception as ex:
             logging.info("chrome request error : {0}".format(url), ex)
             return None
