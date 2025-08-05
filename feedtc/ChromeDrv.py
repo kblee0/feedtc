@@ -45,6 +45,8 @@ class ChromeDrv:
     # get url and return page
     def get(self, url):
         try:
+            self.start()
+
             # 새 브라우저 컨텍스트 생성 (User-Agent, Locale 설정)
             context = self.driver.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
