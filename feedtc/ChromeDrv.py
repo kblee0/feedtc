@@ -70,6 +70,6 @@ class ChromeDrv:
             res = page.content()
             return { "url": page.url, "body": res }
         except Exception as ex:
-            logging.info("chrome request error : {0}".format(url), ex)
+            logging.exception("chrome request error : %s", url)
             return None
         return res
