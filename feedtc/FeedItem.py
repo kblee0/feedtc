@@ -59,9 +59,9 @@ class FeedItem:
     def set_download_dir(self, download_dir):
         sub_dir = self.match and self.match.groupdict().get('dir')
         if sub_dir:
-            self.download_dir = str(PurePath(self.download_dir, sub_dir))
+            self.download_dir = str(PurePath(download_dir, sub_dir))
         else:
-            self.download_dir = str(PurePath(self.download_dir))
+            self.download_dir = str(PurePath(download_dir))
 
     def check_filter(self, filters, debug=False):
         if not filters:
