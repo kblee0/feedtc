@@ -2,6 +2,7 @@ import html
 import logging
 import re
 import urllib.parse
+from pathlib import PurePath
 from typing import Match
 
 
@@ -56,12 +57,11 @@ class FeedItem:
         return self
 
     def set_download_dir(self, download_dir):
-        self.download_dir = a = download_dir if download_dir.endswith('/') else download_dir + '/'
-
         sub_dir = self.match and self.match.groupdict().get('dir')
         if sub_dir:
-            self.download_dir = self.download_dir + sub_dir + '/'
-
+            self.download_dir = str(PurePath(self.download_dir, sub_dir))
+        else:
+            self.download_dir = str(PurePath(self.download_dir))
 
     def check_filter(self, filters, debug=False):
         if not filters:
