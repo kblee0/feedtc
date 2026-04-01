@@ -17,14 +17,21 @@ class FeedItem:
 
     def set_title(self, title:str):
         self.title = title
-        if title == '': return self
-        regex = r"^(.+)[._](E\d+)[._]((\d{6,8})[._])?"
-        matches = re.search(regex, title)
+        self.series_name = ''
+        return self
+
+    def set_series_name(self, title_pattern:str):
+        regex = rf"({re.escape(title_pattern)}).*\.(S\d+E\d+|\d{{6,8}})\."
+        matches = re.search(regex, self.title)
         if matches:
-            if matches.group(4) is None:
-                self.series_name = re.sub('[ -]', '', matches.group(1)) + "." + matches.group(2)
-            else:
-                self.series_name = re.sub('[ -]', '', matches.group(1)) + "." + matches.group(4)
+            self.series_name = re.sub('[ -]', '', matches.group(1)) + "." + matches.group(2)
+            return self
+
+        regex = r"^(.+?)(?:\..+)?\.(S\d+E\d+|\d{6,8})\."
+        matches = re.search(regex, self.title)
+        if matches:
+            self.series_name = re.sub('[ -]', '', matches.group(1)) + "." + matches.group(2)
+
         return self
 
     def _formatting_with_match(self, format_str:str, match:Match):
@@ -67,15 +74,19 @@ class FeedItem:
         if not filters:
             return False
         for pattern in filters:
+            # 입력된 패턴으로 체크
             match = re.search(pattern, self.title)
             if debug: logging.info("title: {}, pattern: {}, match: {}".format(self.title, pattern, match))
             if match:
                 self.match = match
+                self.set_series_name(pattern)
                 return True
+            # 입력된 패턴에서 공백으로 제거하고 체크
             match = re.search(pattern, self.title.replace(' ', ''))
             if debug: logging.info("title: {}, pattern: {}, match: {}".format(self.title, pattern, match))
             if match:
                 self.match = match
+                self.set_series_name(pattern)
                 return True
         self.match = None
         return False
