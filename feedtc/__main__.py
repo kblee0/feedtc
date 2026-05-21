@@ -24,7 +24,7 @@ if __name__ == "__main__":
                         metavar='<logfile path>',
                         help='The logging file, if not specified, prints to output')
     parser.add_argument('--log-level',
-                        default='debug',
+                        default='info',
                         metavar='<log level>',
                         help='critical, error, warning, info, debug')
     parser.add_argument('--clear-added-items',

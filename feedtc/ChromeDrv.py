@@ -64,12 +64,27 @@ class ChromeDrv:
                 Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
             """)
 
+            # [보완 1] 불필요한 광고/트래킹 리소스 차단으로 네트워크 부하 감소 (선택 사항)
+            page.route("**/*.{png,jpg,jpeg,gif,webp,mp4,css,woff,woff2}", lambda route: route.abort())
+
+            # [보완 2] wait_until을 "commit"(HTML 수신 시작)으로 변경하여 무거운 광고 로딩 대기 회피
+            page.goto(url, timeout=45000, wait_until="commit")
+
+            # [보완 3] networkidle 대신 기본 DOM 로드만 확인 (광고 스트리밍 등으로 인한 무한 대기 방지)
+            page.wait_for_load_state('domcontentloaded')
+
             # 페이지 이동
-            page.goto(url)
-            page.wait_for_load_state('networkidle') # 네트워크 idle 상태까지 대기
+            # page.goto(url, timeout=60000, wait_until="domcontentloaded")
+            # page.wait_for_load_state('networkidle') # 네트워크 idle 상태까지 대기
             res = page.content()
+
+            # 정상 처리 시 context 닫고 반환
+            context.close()
             return { "url": page.url, "body": res }
         except Exception as ex:
+            if context:
+                try: context.close() # 에러 시에도 안전하게 컨텍스트 종료
+                except: pass
             logging.exception("chrome request error : %s", url)
             return None
         return res
