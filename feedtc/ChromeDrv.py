@@ -92,10 +92,12 @@ class ChromeDrv:
                 if context:
                     try: context.close() # 에러 시에도 안전하게 컨텍스트 종료
                     except: pass
-                if attempt < max_retry:
-                    wait_sec = (2 ** (attempt + 1)) + random.uniform(0.5, 1.5)
-                    logging.info("{}초 후 다시 시도합니다. ({}/{})".format(wait_sec, attempt + 1, max_retry))
-                    time.sleep(wait_sec)
-                    continue
+                error_msg = str(ex)
+                if "ERR_CONNECTION_RESET" in error_msg or "timeout" in error_msg:
+                    if attempt < max_retry:
+                        wait_sec = (2 ** (attempt + 1)) + random.uniform(0.5, 1.5)
+                        logging.info("{}초 후 다시 시도합니다. ({}/{})".format(wait_sec, attempt + 1, max_retry))
+                        time.sleep(wait_sec)
+                        continue
                 return None
         return None
