@@ -93,7 +93,6 @@ class ChromeDrv:
                         "height": 1080
                     }
                 )
-
                 page = context.new_page()
 
                 # webdriver 제거
@@ -105,11 +104,9 @@ class ChromeDrv:
                             get: () => undefined
                         }
                     );
-
                     window.chrome = {
                         runtime: {}
                     };
-
                     Object.defineProperty(
                         navigator,
                         'languages',
@@ -117,7 +114,6 @@ class ChromeDrv:
                             get: () => ['ko-KR', 'ko', 'en-US', 'en']
                         }
                     );
-
                     Object.defineProperty(
                         navigator,
                         'plugins',
@@ -145,7 +141,6 @@ class ChromeDrv:
 
             except Exception as ex:
                 logging.exception( "chrome request error : %s", url)
-
                 if context:
                     try:
                         context.close()
@@ -161,7 +156,6 @@ class ChromeDrv:
                     "timeout",
                     "net::"
                 ]
-
                 if any(x in error_msg for x in retry_errors):
                     if attempt < max_retry:
                         wait_sec = ( (2 ** (attempt + 1)) + random.uniform(0.5, 1.5))
