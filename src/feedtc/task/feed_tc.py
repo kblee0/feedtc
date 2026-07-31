@@ -8,10 +8,10 @@ import urllib.request
 import yaml
 
 from feedtc.browser.chrome import Chrome
-from feedtc.lib.feed_item import FeedItem
-from feedtc.lib.feed_item_hist import FeedItemHist
-from feedtc.lib.transmission import Transmission
-from feedtc.lib.notify import notify_message
+from feedtc.feedtc_lib.feed_item import FeedItem
+from feedtc.feedtc_lib.feed_item_hist import FeedItemHist
+from feedtc.feedtc_lib.transmission import Transmission
+from feedtc.feedtc_lib.notify import notify_message
 
 
 ##########################################################
