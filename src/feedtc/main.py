@@ -27,6 +27,10 @@ def main():
     parser.add_argument('--clear-added-items',
                         action='store_true',
                         help='Clears the list of added torrents. You can also do that by deleting the added_items.txt')
+    parser.add_argument('--url',
+                        default=None,
+                        metavar='<url>',
+                        help='Specify the url to download the torrent from')
 
     # parse the arguments
     args = parser.parse_args()
@@ -37,4 +41,4 @@ def main():
     else:
         logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=log_level, stream=sys.stdout)
 
-    FeedTc(args.config_file, args.database).run_job()
+    FeedTc(args.config_file, args.database).run_job(args.url)

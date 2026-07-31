@@ -28,9 +28,11 @@ class FeedTc:
     def __del__(self):
         FeedItemHist().close()
 
-    def run_job(self):
+    def run_job(self, url=None):
         change_urls = []
         for task_name in self.config['tasks']:
+            if not url is None:
+                self.config["tasks"][task_name]["inputs"][0]["html"] = [url]
             feedtc_task = FeedTcTask(self.config['tasks'][task_name])
             feedtc_task.run_task()
             change_urls.extend(feedtc_task.change_urls)
