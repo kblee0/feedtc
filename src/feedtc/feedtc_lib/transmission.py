@@ -1,5 +1,7 @@
 import logging
+
 import transmission_rpc
+
 
 class Transmission:
     def __init__(self, config):
