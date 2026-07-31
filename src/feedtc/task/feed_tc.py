@@ -7,11 +7,11 @@ import urllib.request
 
 import yaml
 
-from feedtc.ChromeDrv import ChromeDrv
-from feedtc.FeedItem import FeedItem
-from feedtc.FeedItemHist import FeedItemHist
-from feedtc.Transmission import Transmission
-from feedtc.utils import notify_message
+from feedtc.browser.chrome import Chrome
+from feedtc.lib.feed_item import FeedItem
+from feedtc.lib.feed_item_hist import FeedItemHist
+from feedtc.lib.transmission import Transmission
+from feedtc.lib.notify import notify_message
 
 
 ##########################################################
@@ -39,8 +39,6 @@ class FeedTc:
             notify_message("URL이 변경 되었습니다.\n" + "\n".join(change_urls))
             with open(self.config_file, 'w', encoding='utf8') as stream:
                 yaml.safe_dump(self.config, stream, allow_unicode=True, sort_keys=False)
-
-        ChromeDrv().quit()
 
 ##########################################################
 # FeedTcTask
@@ -110,7 +108,7 @@ class FeedTcTask:
             self.download_item(item)
             self.result["accepted"] += 1
         except Exception as ex:
-            logging.error("Error adding item \'{0}\': ".format(item.link), ex)
+            logging.error("Error adding item '%s': %s", item.link, ex)
             self.result["failed"] += 1
 
     def download_item(self, item):
@@ -137,12 +135,13 @@ class FeedTcTask:
         FeedItemHist().save_item(item)
 
     def get_items_from_input(self, src):
+        chrome = Chrome.get_instance()
         urls = src['html'] if isinstance(src['html'], list) else [src['html']]
         new_urls = []
 
         for url in urls:
             logging.info("SITE URL: " + url)
-            res = ChromeDrv().get(url)
+            res = chrome.get(url)
 
             if res is None:
                 notify_message("feedtc 오류가 발생 했습니다.\nurl=" + url)
@@ -158,7 +157,7 @@ class FeedTcTask:
                                                  query=opr.query, fragment=opr.fragment))
                     if res['url'] != newurl:
                         logging.info("New URL: " + newurl)
-                        res = ChromeDrv().get(newurl)
+                        res = chrome.get(newurl)
 
             new_urls.append(res['url'])
 
@@ -178,7 +177,9 @@ class FeedTcTask:
             src['html'] = new_urls[0]
 
     def _get_magnet_url(self, url):
-        res = ChromeDrv().get(url)
+        chrome = Chrome.get_instance()
+
+        res = chrome.get(url)
 
         if res is None:
             logging.error("Error reading feed \'{0}\': ".format(url))

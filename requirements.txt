@@ -1,5 +1,0 @@
-playwright==1.60.0
-PyYAML==6.0.3
-Requests==2.34.2
-setuptools==82.0.1
-transmissionrpc==0.11

@@ -1,0 +1,22 @@
+tasks:
+  task1:
+    inputs:
+    - html:
+      - https://torrentzota195.com/t/2/13.html?page=1
+      item_pattern: <a class=\"item-link\".*?title=\"(.*?)\".*?href=\"(.*?)\">
+      item_title: '{1}'
+      item_link: '{2}'
+    filter:
+    - accept:
+      - 밥이나 한잔해.*720p
+      - 한끼줍쇼.*720p
+      download_dir: /vol/data/down/
+    - accept:
+      - 결혼의 완성.*NEXT
+      download_dir: /vol/data/otr/
+    transmission:
+      host: hub25.duckdns.org
+      protocol: https
+      port: 8443
+      username: kblee0
+      password: jkl123

@@ -1,0 +1,23 @@
+[project]
+name = "feedtc"
+version = "0.1.0"
+description = "torrent feeds auto downloader"
+readme = "README.md"
+authors = [
+    { name = "kblee0", email = "kblee0@gmail.com" }
+]
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "playwright",
+    "PyYAML",
+    "requests",
+    "transmission-rpc",
+]
+
+[project.scripts]
+tkdown = "feedtc.main:main"
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.21.0",
+]
