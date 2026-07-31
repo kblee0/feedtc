@@ -24,9 +24,6 @@ def main():
                         default='info',
                         metavar='<log level>',
                         help='critical, error, warning, info, debug')
-    parser.add_argument('--clear-added-items',
-                        action='store_true',
-                        help='Clears the list of added torrents. You can also do that by deleting the added_items.txt')
     parser.add_argument('--url',
                         default=None,
                         metavar='<url>',

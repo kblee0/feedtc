@@ -1,3 +1,4 @@
+import random
 import logging
 import random
 import time
@@ -217,7 +218,7 @@ class Chrome:
                     file_path.parent.mkdir(parents=True, exist_ok=True)
 
                     if file_path.exists() and file_path.stat().st_size > 0:
-                        print(f"[{index:03d}/{total:03d}] 이미 존재: {file_path.name}")
+                        logging.warn("[%03d/%03d] 이미 존재: %s",index, total, file_path.name)
                         continue
 
                     pending_images.append({
@@ -265,7 +266,7 @@ class Chrome:
                         file_path.write_bytes(body)
                         downloaded.add(response_url)
 
-                        print(f"[{image['index']:03d}/{total:03d}] 완료: {file_path.name} ({len(body):,} bytes)")
+                        logging.debug("[%03d/%03d] 완료: %s (%,d bytes)", image['index'], total, file_path.name, len(body))
                     except Exception:
                         logging.exception("Image response error: %s", response.url)
 
