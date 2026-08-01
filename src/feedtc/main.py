@@ -1,7 +1,7 @@
 import argparse
 import logging
 import sys
-
+from pathlib import Path
 from feedtc.task.feed_tc import FeedTc
 
 
@@ -31,6 +31,16 @@ def main():
 
     # parse the arguments
     args = parser.parse_args()
+
+    if not Path(args.config_file).is_file():
+        print(f'{args.config_file} config file not found')
+        parser.print_help()
+        parser.exit(status=1)
+
+    if not Path(args.database).is_file():
+        print(f'{args.database} database file not found')
+        parser.print_help()
+        parser.exit(status=1)
 
     log_level = getattr(logging, args.log_level.upper())
     if args.log_file:
