@@ -29,20 +29,21 @@ class FeedTc:
         FeedItemHist().close()
 
     def run_job(self, url=None):
-        change_urls = []
-        for task_name in self.config['tasks']:
-            if not url is None:
-                self.config["tasks"][task_name]["inputs"][0]["html"] = [url]
-            feedtc_task = FeedTcTask(self.config['tasks'][task_name])
-            feedtc_task.run_task()
-            change_urls.extend(feedtc_task.change_urls)
+        try:
+            change_urls = []
+            for task_name in self.config['tasks']:
+                if not url is None:
+                    self.config["tasks"][task_name]["inputs"][0]["html"] = [url]
+                feedtc_task = FeedTcTask(self.config['tasks'][task_name])
+                feedtc_task.run_task()
+                change_urls.extend(feedtc_task.change_urls)
 
-        if len(change_urls) > 0:
-            notify_message("URL이 변경 되었습니다.\n" + "\n".join(change_urls))
-            with open(self.config_file, 'w', encoding='utf8') as stream:
-                yaml.safe_dump(self.config, stream, allow_unicode=True, sort_keys=False)
-
-        Chrome.get_instance().quit()
+            if len(change_urls) > 0:
+                notify_message("URL이 변경 되었습니다.\n" + "\n".join(change_urls))
+                with open(self.config_file, 'w', encoding='utf8') as stream:
+                    yaml.safe_dump(self.config, stream, allow_unicode=True, sort_keys=False)
+        finally:
+            Chrome.get_instance().quit()
 
 ##########################################################
 # FeedTcTask
