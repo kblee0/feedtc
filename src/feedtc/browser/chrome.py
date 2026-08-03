@@ -29,9 +29,6 @@ class Chrome:
         self.driver = None
         self.playwright = None
 
-    def __del__(self):
-        self.quit()
-
     # ------------------------------------------------------------------
     # Browser Start
     # ------------------------------------------------------------------

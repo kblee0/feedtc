@@ -42,6 +42,8 @@ class FeedTc:
             with open(self.config_file, 'w', encoding='utf8') as stream:
                 yaml.safe_dump(self.config, stream, allow_unicode=True, sort_keys=False)
 
+        Chrome.get_instance().quit()
+
 ##########################################################
 # FeedTcTask
 ##########################################################
